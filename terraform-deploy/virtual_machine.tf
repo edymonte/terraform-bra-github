@@ -1,5 +1,5 @@
 data "azurerm_resource_group" "example" {
-  name = var.resource_group_name
+  name = "rg-tfstate-bra-dev" #var.resource_group_name
 }
 
 resource "azurerm_virtual_network" "example" {
