@@ -55,7 +55,7 @@ jobs:
     - name: Terraform Plan
       id: plan
       run: terraform plan -no-color -input=false -var "resource_group_name=${{secrets.AZURE_RESOURCE_GROUP_NAME}}"
-      continue-on-error: true
+      continue-on-error: false #true
       
     - name: Update Pull Request
       uses: actions/github-script@v6
@@ -95,7 +95,7 @@ jobs:
       run:
         working-directory: terraform-deploy
       
-    name: Deploy Dev
+    name: Deploy -> Dev
     environment: dev
     runs-on: ubuntu-latest
     env:
@@ -121,15 +121,15 @@ jobs:
     - name: Terraform Apply
       run: terraform apply -auto-approve -var "resource_group_name=${{secrets.AZURE_RESOURCE_GROUP_NAME}}"
 
-  deploy-to-test:
+  deploy-to-homolog:
     if: github.event_name != 'pull_request'
     needs: deploy-to-dev
     defaults:
       run:
         working-directory: terraform-deploy
       
-    name: Deploy Homolog
-    environment: test
+    name: Deploy -> Homolog
+    environment: homolog
     runs-on: ubuntu-latest
     env:
       ARM_CLIENT_ID: "${{ secrets.AZURE_CLIENT_ID }}"
@@ -156,12 +156,12 @@ jobs:
 
   deploy-to-prod:
     if: github.event_name != 'pull_request'
-    needs: deploy-to-test
+    needs: deploy-to-homolog
     defaults:
       run:
         working-directory: terraform-deploy
       
-    name: Deploy Prod
+    name: Deploy -> Prod
     environment: prod
     runs-on: ubuntu-latest
     env:
