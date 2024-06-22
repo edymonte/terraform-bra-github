@@ -10,12 +10,12 @@
    }
  }
 
-# resource "azurerm_virtual_network" "example" {
-#   name                = "example-network"
-#   address_space       = ["10.0.0.0/16"]
-#   location            = data.azurerm_resource_group.example.location
-#   resource_group_name = data.azurerm_resource_group.example.name
-# }
+resource "azurerm_virtual_network" "vnet_github" {
+  name                = "vnet-github"
+  address_space       = ["172.30.0.0/16"]
+  location            = var.location
+  resource_group_name = var.resource_group_name
+}
 
 # resource "azurerm_subnet" "example" {
 #   name                 = "internal"
