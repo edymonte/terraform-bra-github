@@ -15,12 +15,3 @@ provider "azurerm" {
   client_secret   = "2Ul8Q~oqg8rxtuYlwZ5wZzwHg_ZaFeK1Rfgd1cbg"
   tenant_id       = "2f3876f5-e513-4806-8697-d5ef85d0c67e"
 }
-
-# resource "azurerm_resource_group" "rg_github" {
-#   name     = "rg-tfstate-bra-dev"
-#   location = "East US"
-
-#   tags = {
-#     environment = "Develop"
-#   }
-# }
