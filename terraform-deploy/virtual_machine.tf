@@ -1,6 +1,14 @@
-data "azurerm_resource_group" "example" {
-  name = "rg-tfstate-bra-dev" #var.resource_group_name
-}
+# data "azurerm_resource_group" "example" {
+#   name = var.resource_group_name
+# }
+
+ resource "azurerm_resource_group" "rg_github" {
+   name     = var.resource_group_name
+   location = "East US"
+   tags = {
+     environment = "Develop"
+   }
+ }
 
 resource "azurerm_virtual_network" "example" {
   name                = "example-network"
