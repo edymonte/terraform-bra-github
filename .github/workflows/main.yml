@@ -1,4 +1,4 @@
-name: Run Terraform with OpenID Connect
+name: Terraform utilizando OpenID Connect
 on: 
   push:
     branches:
@@ -18,7 +18,7 @@ jobs:
     if: github.event_name == 'pull_request'
     defaults:
       run:
-        working-directory: terraform-example-deploy
+        working-directory: terraform-deploy
     name: Analyse the Terraform
     environment: dev
     runs-on: ubuntu-latest
@@ -93,16 +93,16 @@ jobs:
     if: github.event_name != 'pull_request' && contains(toJson(github.event.commits), 'Initial commit') == false
     defaults:
       run:
-        working-directory: terraform-example-deploy
+        working-directory: terraform-deploy
       
-    name: Deploy to Dev
+    name: Deploy Dev
     environment: dev
     runs-on: ubuntu-latest
     env:
       ARM_CLIENT_ID: "${{ secrets.AZURE_CLIENT_ID }}"
       ARM_SUBSCRIPTION_ID: "${{ secrets.AZURE_SUBSCRIPTION_ID }}"
       ARM_TENANT_ID: "${{ secrets.AZURE_TENANT_ID }}"
-      ARM_USE_AZUREAD: true # This environment variable tells the backend to use AzureAD auth rather than trying a create a key. It means we can limit the permissions applied to the storage account and container to least priviledge: https://developer.hashicorp.com/terraform/language/settings/backends/azurerm#use_azuread_auth
+      ARM_USE_AZUREAD: true # Esta variável de ambiente informa ao back-end para usar a autenticação do AzureAD ao invés de tentar criar uma chave.Com isso podemos limitar as permissões aplicadas à conta de armazenamento e ao contêiner ao menor privilégio: https://developer.hashicorp.com/terraform/language/settings/backends/azurerm#use_azuread_auth
 
     steps:
     - name: Checkout Code
@@ -126,9 +126,9 @@ jobs:
     needs: deploy-to-dev
     defaults:
       run:
-        working-directory: terraform-example-deploy
+        working-directory: terraform-deploy
       
-    name: Deploy to Test
+    name: Deploy Homolog
     environment: test
     runs-on: ubuntu-latest
     env:
@@ -159,9 +159,9 @@ jobs:
     needs: deploy-to-test
     defaults:
       run:
-        working-directory: terraform-example-deploy
+        working-directory: terraform-deploy
       
-    name: Deploy to Prod
+    name: Deploy Prod
     environment: prod
     runs-on: ubuntu-latest
     env:
@@ -174,7 +174,7 @@ jobs:
     - name: Checkout Code
       uses: actions/checkout@v2.5.0
 
-    # NOTE This is an example of how to login to the Azure CLI, this step is not needed for Terraform
+    # NOTE Exemplo de como autenticar via Azure CLI, this
     #- name: 'Az CLI login'
     #  uses: azure/login@v1
     #
