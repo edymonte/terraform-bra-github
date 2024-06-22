@@ -62,7 +62,7 @@ The instructions for this sample are in the form of a Lab. Follow along with the
 
 ## Demo / Lab
 
-### Generate a PAT (Personal Access Token) in GitHub
+#### Generate a PAT (Personal Access Token) in GitHub
 
 1. Navigate to [github.com](https://github.com).
 1. Login and select the account icon in the top right and then `Settings`.
