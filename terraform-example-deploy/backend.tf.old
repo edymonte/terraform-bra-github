@@ -4,9 +4,8 @@
 #     storage_account_name = "terraformgithubbra"
 #     container_name       = "tfstate"
 #     key                  = "terraform.tfstate"
-#    # access_key           = "EOOj6Gm8/aGscdQ/4WRBy55YaQQ1hlpujJX7FxMLF3x5NT0a/kxzHGxc2BVvxAmW6MFwRDdenkm9+AStX79e/g=="
-#    } 
-#   }
+#   } 
+#  }
  
 #   required_providers {
 #     azurerm = {
