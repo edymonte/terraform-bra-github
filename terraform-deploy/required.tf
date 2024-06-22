@@ -16,11 +16,11 @@ provider "azurerm" {
   tenant_id       = "2f3876f5-e513-4806-8697-d5ef85d0c67e"
 }
 
-resource "azurerm_resource_group" "rg_github" {
-  name     = "rg-tfstate-bra-dev"
-  location = "East US"
+# resource "azurerm_resource_group" "rg_github" {
+#   name     = "rg-tfstate-bra-dev"
+#   location = "East US"
 
-  tags = {
-    environment = "Develop"
-  }
-}
+#   tags = {
+#     environment = "Develop"
+#   }
+# }

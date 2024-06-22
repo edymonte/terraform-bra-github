@@ -1,4 +1,4 @@
 variable "resource_group_name" {
   type = string
-  default = "rg-terraform-github-actions-state"
+  default = "rg-tfstate-bra-dev"
 }
