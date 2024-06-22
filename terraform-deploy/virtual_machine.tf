@@ -3,8 +3,8 @@
 # }
 
  resource "azurerm_resource_group" "rg_github" {
-   name     = "rg-tfstate-bra-dev"
-   location = "East US"
+   name     = var.resource_group_name
+   location = var.location
    tags = {
      environment = "develop"
    }
