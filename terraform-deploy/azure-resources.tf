@@ -22,13 +22,12 @@ resource "azurerm_storage_container" "tfstate" {
 }
 
 
-
-# resource "azurerm_virtual_network" "vnet_github" {
-#   name                = "vnet-github"
-#   address_space       = ["172.30.0.0/16"]
-#   location            = var.location
-#   resource_group_name = var.resource_group_name
-# }
+resource "azurerm_virtual_network" "vnet_github" {
+  name                = "vnet-github"
+  address_space       = ["172.30.0.0/16"]
+  location            = var.location
+  resource_group_name = var.resource_group_name
+}
 
 # resource "azurerm_subnet" "example" {
 #   name                 = "internal"
