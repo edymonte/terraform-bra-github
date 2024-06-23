@@ -5,7 +5,7 @@ variable "prefix" {
 
 variable "location" {
   type    = string
-  default = "UK South"
+  default = "East US"
 }
 
 variable "github_token" {
@@ -30,7 +30,7 @@ variable "github_repository_template" {
 
 variable "environments" {
   type    = list(string)
-  default = ["dev", "test", "prod"]
+  default = ["dev", "hom", "prod"]
 }
 
 variable "use_managed_identity" {
