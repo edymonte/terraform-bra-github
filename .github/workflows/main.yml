@@ -28,8 +28,23 @@ jobs:
       ARM_CLIENT_ID: "${{ secrets.AZURE_CLIENT_ID }}"
       ARM_CLIENT_SECRET: "${{ secrets.ARM_CLIENT_SECRET }}"
     steps:
+
+    #########################################################################################
+    #                            TESTE UTILIZANDO AZ LOGIN
+    #########################################################################################
+
+    - name: Run Azure Cli
+      run: |
+        az account show --output none
+        az group show --name GitHubAction_CI_RG --output none
+        az vm list --output none
+    #########################################################################################
+    #                                     FIM DO TESTE
+    #########################################################################################
+
+
     - name: Checkout Code
-      uses: actions/checkout@v2.5.0
+      uses: actions/checkout@v4  #actions/checkout@v2.5.0
 
     - name: HashiCorp - Setup Terraform
       uses: hashicorp/setup-terraform@v2.0.3
