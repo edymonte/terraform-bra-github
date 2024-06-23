@@ -5,13 +5,12 @@ on:
   push:
     branches:
       - main
-    paths:
-      - terraform-deploy/**
-  
+    # paths:
+    #   - terraform-deploy/**
+        
   pull_request: # [main, next]
-    paths:
-      - terraform-deploy/**
-
+    # paths:
+    #   - terraform-deploy/**
 
 jobs:
   terraform:
