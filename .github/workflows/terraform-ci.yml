@@ -1,7 +1,5 @@
 name: 'Terraform CI'
-
 on:
-  
   push:
     branches:
       - main
@@ -11,16 +9,29 @@ on:
   pull_request: # [main, next]
     # paths:
     #   - terraform-deploy/**
+  branches:
+     - main
+  workflow_dispatch:  
 
-jobs:
-  terraform:
-    name: 'Terraform'
-    runs-on: ubuntu-latest
+# jobs:
+#   terraform:
+#     name: 'Terraform'
+#     runs-on: ubuntu-latest
 
+#     defaults:
+#       run:
+#         working-directory: terraform-deploy
+#         shell: bash
+
+jobs: 
+  analysis:
+    if: github.event_name == 'pull_request'
     defaults:
       run:
         working-directory: terraform-deploy
-        shell: bash
+    name: Analyse the Terraform
+    environment: dev
+    runs-on: ubuntu-latest
 
     steps:
     
@@ -43,12 +54,10 @@ jobs:
        
 
 
-    # Checks that all Terraform configuration files adhere to a canonical format
     - name: Terraform Format
       id: fmt
       run: terraform fmt -check
 
-    # Generates an execution plan for Terraform
     - name: Terraform Plan
       id: plan
       if: github.event_name == 'pull_request'
@@ -58,7 +67,7 @@ jobs:
         ARM_CLIENT_ID: "${{ secrets.AZURE_CLIENT_ID }}"
         ARM_CLIENT_SECRET: "${{ secrets.ARM_CLIENT_SECRET }}"
 
-
+    
       run: terraform plan -no-color
       continue-on-error: true
 
