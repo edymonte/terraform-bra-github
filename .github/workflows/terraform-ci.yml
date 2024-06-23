@@ -1,5 +1,7 @@
 name: 'Terraform CI'
+
 on:
+  
   push:
     branches:
       - main
@@ -7,31 +9,20 @@ on:
     #   - terraform-deploy/**
         
   pull_request: # [main, next]
+     branches:
+      - main
     # paths:
     #   - terraform-deploy/**
-  branches:
-     - main
-  workflow_dispatch:  
 
-# jobs:
-#   terraform:
-#     name: 'Terraform'
-#     runs-on: ubuntu-latest
+jobs:
+  terraform:
+    name: 'Terraform'
+    runs-on: ubuntu-latest
 
-#     defaults:
-#       run:
-#         working-directory: terraform-deploy
-#         shell: bash
-
-jobs: 
-  analysis:
-    if: github.event_name == 'pull_request'
     defaults:
       run:
         working-directory: terraform-deploy
-    name: Analyse the Terraform
-    environment: dev
-    runs-on: ubuntu-latest
+        shell: bash
 
     steps:
     
