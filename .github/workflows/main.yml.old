@@ -3,7 +3,11 @@ on:
   push:
     branches:
      - main
+    paths:
+       - terraform-deploy/**
   pull_request:
+    # paths:
+    #   - terraform-deploy/**
     branches:
      - main
   workflow_dispatch:
