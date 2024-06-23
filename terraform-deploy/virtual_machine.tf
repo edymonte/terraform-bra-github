@@ -1,22 +1,34 @@
-# data "azurerm_resource_group" "example" {
-#   name = var.resource_group_name
-# }
 
-
-resource "azurerm_resource_group" "rg_github" {
-  name     = var.resource_group_name
+resource "azurerm_resource_group" "main" {
+  name     = "rg-tfstate-bra-dev"
   location = var.location
-  tags = {
-    environment = "develop"
-  }
 }
 
-resource "azurerm_virtual_network" "vnet_github" {
-  name                = "vnet-github"
-  address_space       = ["172.30.0.0/16"]
-  location            = var.location
-  resource_group_name = var.resource_group_name
+
+resource "azurerm_storage_account" "main" {
+  name                     = "stgbradevtfstate01"
+  resource_group_name      = azurerm_resource_group.main.name
+  location                 = azurerm_resource_group.main.location
+  account_tier             = "Standard"
+  account_replication_type = "LRS"
 }
+
+
+resource "azurerm_storage_container" "tfstate" {
+  name                  = "tfstate"
+  storage_account_name  = azurerm_storage_account.main.name
+  container_access_type = "private"
+
+}
+
+
+
+# resource "azurerm_virtual_network" "vnet_github" {
+#   name                = "vnet-github"
+#   address_space       = ["172.30.0.0/16"]
+#   location            = var.location
+#   resource_group_name = var.resource_group_name
+# }
 
 # resource "azurerm_subnet" "example" {
 #   name                 = "internal"
