@@ -1,4 +1,4 @@
-name: Terraform utilizando OpenID Connect
+name: Utilizando Terraform OpenID Connect
 on: 
   push:
     branches:
