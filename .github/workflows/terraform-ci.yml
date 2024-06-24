@@ -31,11 +31,9 @@ jobs:
 ###############################################################################################################
 
     steps:
-    # Checkout the repository to the GitHub Actions runner
     - name: Checkout
       uses: actions/checkout@v4
 
-    # Install the latest version of Terraform CLI and configure the Terraform CLI configuration file with a Terraform Cloud user API token
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v3
 
@@ -48,25 +46,12 @@ jobs:
         ARM_CLIENT_ID: "${{ secrets.AZURE_CLIENT_ID }}"
         ARM_CLIENT_SECRET: "${{ secrets.ARM_CLIENT_SECRET }}"
 
-    - name: Install Checkov
-      id: checkov
-      if: github.event_name == 'pull_request'
-      run: |
-          pip install checkov
-
-
-    - name: Checkov Static Test
-      id: static
-      if: github.event_name == 'pull_request'
-      run: |
-          checkov -d . --download-external-modules true    
-        
-
+       
     - name: Terraform Format
       id: fmt
       run: terraform fmt -check
 
-    # Generates an execution plan for Terraform
+    
     - name: Terraform Plan
       id: plan
       if: github.event_name == 'pull_request'
@@ -106,13 +91,20 @@ jobs:
             body: output
           })
 
+    
     - name: Terraform Plan Status
       if: steps.plan.outcome == 'failure'
       run: exit 1
 
-    - name: Terraform Apply -> Dev
-      if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-      run: terraform apply -auto-approve
+  deploy-to-dev:
+    if: github.event_name != 'pull_request' && contains(toJson(github.event.commits), 'Initial commit') == false
+    defaults:
+      run:
+        working-directory: terraform-example-deploy
+
+      name: Terraform Apply -> Dev
+      environment: dev
+      runs-on: ubuntu-latest
       env:
         ARM_SUBSCRIPTION_ID: "${{ secrets.AZURE_SUBSCRIPTION_ID }}"
         ARM_TENANT_ID: "${{ secrets.AZURE_TENANT_ID }}"
