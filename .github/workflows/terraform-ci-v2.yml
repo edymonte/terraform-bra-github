@@ -10,10 +10,9 @@ on:
       
   pull_request: # [master, next]
      branches:
-      - 'refs/heads/main'
+      - main
     # paths:
     #   - terraform-deploy/**
-
   workflow_dispatch:
 
 jobs:
@@ -21,7 +20,6 @@ jobs:
     name: 'Terraform-CI'
     runs-on: ubuntu-latest
 
-    # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
     defaults:
       run:
         working-directory: terraform-deploy
@@ -107,7 +105,6 @@ jobs:
       run: exit 1
 
     - name: Terraform Deploy -> Dev
-      environment: dev
       if: github.ref == 'refs/heads/main' && github.event_name == 'push'
       run: terraform apply -auto-approve
       env:
@@ -148,7 +145,6 @@ jobs:
         working-directory: terraform-deploy
       
     name: Terraform Deploy -> Homolog
-    environment: homolog
     runs-on: ubuntu-latest
     env:
       ARM_CLIENT_ID: "${{ secrets.AZURE_CLIENT_ID }}"
@@ -188,7 +184,6 @@ jobs:
         working-directory: terraform-deploy
       
     name: Terraform Deploy -> Prod
-    environment: prod
     runs-on: ubuntu-latest
     env:
       ARM_CLIENT_ID: "${{ secrets.AZURE_CLIENT_ID }}"
