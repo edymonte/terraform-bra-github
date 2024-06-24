@@ -1,5 +1,5 @@
 resource "azurerm_resource_group" "example" {
-  name     = "rg-github-agorafoi"
+  name     = "rg-github-boaaa"
   location = var.location
 }
 

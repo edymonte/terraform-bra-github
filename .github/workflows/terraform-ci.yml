@@ -24,7 +24,7 @@ jobs:
     name: Terraform-CI-Dev
     environment: dev
     runs-on: ubuntu-latest
-
+    
 
 ###############################################################################################################
 #                                            AMBIENTE DE DEV
@@ -111,9 +111,9 @@ jobs:
 ###############################################################################################################
 #                                            AMBIENTE DE HOMOLOG
 ###############################################################################################################
-
+    steps:
     - name: Checkout Code
-      uses: actions/checkout@v4
+        uses: actions/checkout@v4
 
     - name: HashiCorp - Setup Terraform
       uses: hashicorp/setup-terraform@v2.0.3
