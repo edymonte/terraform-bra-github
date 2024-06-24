@@ -111,7 +111,7 @@ jobs:
 #                                                AMBIENTE DE HOMOLOG
 ###############################################################################################################
 
-
+    
     - name: Checkout
       uses: actions/checkout@v4
 
@@ -130,7 +130,6 @@ jobs:
        
     - name: Terraform Apply -> Homolog
       if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-      needs: [Terraform Apply -> Dev]
       run: terraform apply -auto-approve
       env:
         ARM_SUBSCRIPTION_ID: "${{ secrets.AZURE_SUBSCRIPTION_ID }}"
