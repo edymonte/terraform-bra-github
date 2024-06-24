@@ -96,37 +96,14 @@ jobs:
       if: steps.plan.outcome == 'failure'
       run: exit 1
 
-  deploy-to-dev:
-    if: github.event_name != 'pull_request' && contains(toJson(github.event.commits), 'Initial commit') == false
-    defaults:
-      run:
-        working-directory: terraform-example-deploy
-
-      name: Terraform Apply -> Dev
-      environment: dev
-      runs-on: ubuntu-latest
+    - name: Terraform Apply -> Dev
+      if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+      run: terraform apply -auto-approve
       env:
         ARM_SUBSCRIPTION_ID: "${{ secrets.AZURE_SUBSCRIPTION_ID }}"
         ARM_TENANT_ID: "${{ secrets.AZURE_TENANT_ID }}"
         ARM_CLIENT_ID: "${{ secrets.AZURE_CLIENT_ID }}"
         ARM_CLIENT_SECRET: "${{ secrets.ARM_CLIENT_SECRET }}"
-
-    steps:
-    - name: Checkout Code
-      uses: actions/checkout@v2.5.0
-
-    - name: HashiCorp - Setup Terraform
-      uses: hashicorp/setup-terraform@v3
-
-    - name: Terraform Init
-      run: |
-        ARM_SUBSCRIPTION_ID: "${{ secrets.AZURE_SUBSCRIPTION_ID }}"
-        ARM_TENANT_ID: "${{ secrets.AZURE_TENANT_ID }}"
-        ARM_CLIENT_ID: "${{ secrets.AZURE_CLIENT_ID }}"
-        ARM_CLIENT_SECRET: "${{ secrets.ARM_CLIENT_SECRET }}"
-      
-    - name: Terraform Apply
-      run: terraform apply -auto-approve
 
 
 
