@@ -15,7 +15,7 @@ permissions:
       
 jobs: 
   analysis:
-    if: github.event_name == 'pull_request'
+    if: github.event_name !== 'pull_request'
     defaults:
       run:
         working-directory: terraform-deploy
