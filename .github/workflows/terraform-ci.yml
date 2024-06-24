@@ -112,6 +112,33 @@ jobs:
 ###############################################################################################################
     #needs: [Terraform Apply -> Dev]
 
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v3
+
+
+    - name: Terraform Init
+      run: terraform init
+      env:
+        ARM_SUBSCRIPTION_ID: "${{ secrets.AZURE_SUBSCRIPTION_ID }}"
+        ARM_TENANT_ID: "${{ secrets.AZURE_TENANT_ID }}"
+        ARM_CLIENT_ID: "${{ secrets.AZURE_CLIENT_ID }}"
+        ARM_CLIENT_SECRET: "${{ secrets.ARM_CLIENT_SECRET }}"
+
+       
+    - name: Terraform Apply -> Homolog
+      if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+      needs: [Terraform Apply -> Dev]
+      run: terraform apply -auto-approve
+      env:
+        ARM_SUBSCRIPTION_ID: "${{ secrets.AZURE_SUBSCRIPTION_ID }}"
+        ARM_TENANT_ID: "${{ secrets.AZURE_TENANT_ID }}"
+        ARM_CLIENT_ID: "${{ secrets.AZURE_CLIENT_ID }}"
+        ARM_CLIENT_SECRET: "${{ secrets.ARM_CLIENT_SECRET }}"
+
 
 # ###############################################################################################################
 # #                                                AMBIENTE DE PROD
