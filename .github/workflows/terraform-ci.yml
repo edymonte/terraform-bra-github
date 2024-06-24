@@ -1,31 +1,28 @@
-name: 'Terraform CI'
-
-on:
-  
+name: Run Terraform with OpenID Connect
+on: 
   push:
     branches:
-      - main
-    # paths:
-    #   - terraform-deploy/**
-      
-  pull_request: # [master, next]
-     branches:
-      - main
-    # paths:
-    #   - terraform-deploy/**
+     - main
+  pull_request:
+    branches:
+     - main
   workflow_dispatch:
 
-jobs:
-  terraform:
-    name: 'Terraform-CI'
-    runs-on: ubuntu-latest
-
+permissions:
+      id-token: write
+      contents: read
+      pull-requests: write
+      
+jobs: 
+  analysis:
+    if: github.event_name == 'pull_request'
     defaults:
       run:
-        working-directory: terraform-deploy
-        shell: bash
-
-
+        working-directory: terraform-example-deploy
+    name: Analyse the Terraform
+    environment: dev
+    runs-on: ubuntu-latest
+ 
 ###############################################################################################################
 #                                            AMBIENTE DE DEV
 ###############################################################################################################

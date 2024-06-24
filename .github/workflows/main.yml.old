@@ -17,11 +17,11 @@ permissions:
       contents: read
       pull-requests: write
       
-jobs: 
+: 
   analysis:
     if: github.event_name == 'pull_request'
     defaults:
-      run:
+      run:jobs
         working-directory: terraform-deploy
     name: Analyse the Terraform
     environment: dev
@@ -32,25 +32,6 @@ jobs:
       ARM_CLIENT_ID: "${{ secrets.AZURE_CLIENT_ID }}"
       ARM_CLIENT_SECRET: "${{ secrets.ARM_CLIENT_SECRET }}"
     steps:
-
-    #########################################################################################
-    #                            TESTE UTILIZANDO AZ LOGIN
-    #########################################################################################
-
-    # - name: Az CLI login with subscription OIDC
-    #   uses: azure/login@v1
-    #   with:
-    #     client-id: ${{ secrets.AZURE_CLIENT_ID }}
-    #     client-secret: ${{ secrets.AZURE_CLIENT_SECRET }}
-    #     tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-    #     subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-
-    # - run: |
-    #       az account show --output none
-    #########################################################################################
-    #                                     FIM DO TESTE
-    #########################################################################################
-
 
     - name: Checkout Code
       uses: actions/checkout@v4  #actions/checkout@v2.5.0
