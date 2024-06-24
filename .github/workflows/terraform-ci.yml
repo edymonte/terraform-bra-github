@@ -1,19 +1,21 @@
-name: Run Terraform with OpenID Connect
-on: 
+name: 'Terraform CI'
+
+on:
+  
   push:
     branches:
-     - main
-  pull_request:
-    branches:
-     - main
+      - main
+    # paths:
+    #   - terraform-deploy/**
+      
+  pull_request: # [master, next]
+     branches:
+      - main
+    # paths:
+    #   - terraform-deploy/**
   workflow_dispatch:
 
-permissions:
-      id-token: write
-      contents: read
-      pull-requests: write
-      
-jobs: 
+jobs:
   analysis:
     # if: github.event_name == 'push'
     defaults:
@@ -22,7 +24,8 @@ jobs:
     name: Analyse the Terraform
     environment: dev
     runs-on: ubuntu-latest
- 
+
+
 ###############################################################################################################
 #                                            AMBIENTE DE DEV
 ###############################################################################################################
@@ -36,10 +39,7 @@ jobs:
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v1
 
-     # Checks that all Terraform configuration files adhere to a canonical format
-    - name: Terraform Format
-      id: fmt
-      run: terraform fmt -check
+
 
 
     # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
@@ -52,7 +52,14 @@ jobs:
         ARM_CLIENT_SECRET: "${{ secrets.ARM_CLIENT_SECRET }}"
         
 
-   # Generates an execution plan for Terraform
+
+
+    # Checks that all Terraform configuration files adhere to a canonical format
+    - name: Terraform Format
+      id: fmt
+      run: terraform fmt -check
+
+    # Generates an execution plan for Terraform
     - name: Terraform Plan
       id: plan
       if: github.event_name == 'pull_request'
@@ -96,15 +103,9 @@ jobs:
       if: steps.plan.outcome == 'failure'
       run: exit 1
 
-  deploy-to-dev:
-    if: github.event_name != 'pull_request' && contains(toJson(github.event.commits), 'Initial commit') == false
-    defaults:
-      run:
-        working-directory: terraform-example-deploy
-      
-    name: terraform Deploy -> Dev
-    environment: dev
-    runs-on:
+    - name: Terraform Deploy -> Dev
+      if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+      run: terraform apply -auto-approve
       env:
         ARM_SUBSCRIPTION_ID: "${{ secrets.AZURE_SUBSCRIPTION_ID }}"
         ARM_TENANT_ID: "${{ secrets.AZURE_TENANT_ID }}"
