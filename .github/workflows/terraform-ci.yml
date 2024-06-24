@@ -15,7 +15,7 @@ permissions:
       
 jobs: 
   analysis:
-    if: github.event_name !== 'pull_request'
+    if: github.event_name == 'push'
     defaults:
       run:
         working-directory: terraform-deploy
@@ -96,9 +96,15 @@ jobs:
       if: steps.plan.outcome == 'failure'
       run: exit 1
 
-    - name: Terraform Deploy -> Dev
-      if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-      run: terraform apply -auto-approve
+  deploy-to-dev:
+    if: github.event_name != 'pull_request' && contains(toJson(github.event.commits), 'Initial commit') == false
+    defaults:
+      run:
+        working-directory: terraform-example-deploy
+      
+    name: Deploy to Dev
+    environment: dev
+    runs-on:
       env:
         ARM_SUBSCRIPTION_ID: "${{ secrets.AZURE_SUBSCRIPTION_ID }}"
         ARM_TENANT_ID: "${{ secrets.AZURE_TENANT_ID }}"
