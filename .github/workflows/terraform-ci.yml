@@ -119,7 +119,7 @@ jobs:
     name: Terraform-CI-Homolog
     environment: homolog
     runs-on: ubuntu-latest
-    needs: [Terraform-CI-Dev]
+    needs: [analysis]
 
     steps:
     - name: Checkout
