@@ -5,10 +5,9 @@ on:
   push:
     branches:
       - main
-    paths:
-      - terraform-deploy/**
-      - ./workflows/**
-  
+    # paths:
+    #   - terraform-deploy/**
+      
   pull_request: # [master, next]
     paths:
       - terraform-deploy/**
