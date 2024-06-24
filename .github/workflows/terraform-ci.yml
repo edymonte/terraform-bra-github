@@ -47,6 +47,19 @@ jobs:
         ARM_TENANT_ID: "${{ secrets.AZURE_TENANT_ID }}"
         ARM_CLIENT_ID: "${{ secrets.AZURE_CLIENT_ID }}"
         ARM_CLIENT_SECRET: "${{ secrets.ARM_CLIENT_SECRET }}"
+
+    - name: Install Checkov
+      id: checkov
+      if: github.event_name == 'pull_request'
+      run: |
+          pip install checkov
+
+
+    - name: Checkov Static Test
+      id: static
+      if: github.event_name == 'pull_request'
+      run: |
+          checkov -d . --download-external-modules true    
         
 
     - name: Terraform Format
@@ -97,7 +110,7 @@ jobs:
       if: steps.plan.outcome == 'failure'
       run: exit 1
 
-    - name: Terraform Deploy -> Dev
+    - name: Terraform Apply -> Dev
       if: github.ref == 'refs/heads/main' && github.event_name == 'push'
       run: terraform apply -auto-approve
       env:
@@ -111,7 +124,7 @@ jobs:
 ###############################################################################################################
 #                                                AMBIENTE DE HOMOLOG
 ###############################################################################################################
-    
+    #needs: [Terraform Apply -> Dev]
 
 
 # ###############################################################################################################
