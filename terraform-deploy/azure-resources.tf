@@ -1,8 +1,7 @@
-
-# resource "azurerm_resource_group" "example" {
-#   name     = "rg-tfstate-bra-dev"
-#   location = var.location
-# }
+resource "azurerm_resource_group" "example" {
+  name     = "rg-github-bra"
+  location = var.location
+}
 
 
 # resource "azurerm_storage_account" "example" {
