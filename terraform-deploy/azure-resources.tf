@@ -1,6 +1,9 @@
 resource "azurerm_resource_group" "example" {
   name     = "rg-github-ihuuulll"
   location = var.location
+ tags = {
+    environment = "dev"
+  }
 }
 
 
