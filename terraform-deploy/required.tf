@@ -10,9 +10,9 @@ terraform {
     }
   }
   backend "azurerm" {
-    subscription_id      = "385a379e-e92e-4d3d-be57-ba91115c7e66"
-    resource_group_name  = "rg-tfstate-bra-dev"
-    storage_account_name = "stgbradevtfstate01"
+    subscription_id      = "6d90d82c-231b-4534-ab67-7c0f357dd2f2"
+    resource_group_name  = "rg-lab-github-montry"
+    storage_account_name = "montrystate"
     container_name       = "tfstate"
     key                  = "terraform.tfstate"
   }
