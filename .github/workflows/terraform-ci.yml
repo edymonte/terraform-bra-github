@@ -16,7 +16,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  analysis:
+  terraform-dev:
     # if: github.event_name == 'push'
     defaults:
       run:
@@ -119,7 +119,7 @@ jobs:
     name: Terraform-CI-Homolog
     environment: homolog
     runs-on: ubuntu-latest
-    needs: [analysis]
+    needs: [terraform-dev]
 
     steps:
     - name: Checkout
