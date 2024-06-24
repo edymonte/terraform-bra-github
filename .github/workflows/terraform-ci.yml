@@ -24,7 +24,7 @@ jobs:
     name: Terraform-CI-Dev
     environment: dev
     runs-on: ubuntu-latest
-    
+
 
 ###############################################################################################################
 #                                            AMBIENTE DE DEV
@@ -111,37 +111,7 @@ jobs:
 ###############################################################################################################
 #                                            AMBIENTE DE HOMOLOG
 ###############################################################################################################
-    steps:
-    - name: Checkout Code
-        uses: actions/checkout@v4
-
-    - name: HashiCorp - Setup Terraform
-      uses: hashicorp/setup-terraform@v2.0.3
-
-    - name: Terraform Init
-      run: terraform init
-      env:
-        ARM_SUBSCRIPTION_ID: "${{ secrets.AZURE_SUBSCRIPTION_ID }}"
-        ARM_TENANT_ID: "${{ secrets.AZURE_TENANT_ID }}"
-        ARM_CLIENT_ID: "${{ secrets.AZURE_CLIENT_ID }}"
-        ARM_CLIENT_SECRET: "${{ secrets.ARM_CLIENT_SECRET }}"
-      
-    - name: Terraform Apply
-      run: terraform apply -auto-approve -var "resource_group_name=${{secrets.AZURE_RESOURCE_GROUP_NAME}}"
-
-  deploy-to-homolog:
-    if: github.event_name != 'pull_request'
-    defaults:
-      run:
-        working-directory: terraform-deploy
-      
-    name: Terraform Deploy -> Homolog
-    runs-on: ubuntu-latest
-    env:
-      ARM_CLIENT_ID: "${{ secrets.AZURE_CLIENT_ID }}"
-      ARM_SUBSCRIPTION_ID: "${{ secrets.AZURE_SUBSCRIPTION_ID }}"
-      ARM_TENANT_ID: "${{ secrets.AZURE_TENANT_ID }}"
-      ARM_USE_AZUREAD: true
+    
 
 
 # ###############################################################################################################
