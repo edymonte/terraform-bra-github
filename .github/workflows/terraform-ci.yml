@@ -16,7 +16,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  terraform-dev:
+  terraform-dev-deploy:
     # if: github.event_name == 'push'
     defaults:
       run:
@@ -112,14 +112,15 @@ jobs:
 ###############################################################################################################
 
     
-  jobs:
+  terraform-homolog-deploy:
+    # if: github.event_name == 'push'
     defaults:
       run:
         working-directory: terraform-deploy
     name: Terraform-Deploy-Homolog
     environment: homolog
     runs-on: ubuntu-latest
-    needs: [terraform-dev]
+    needs: [terraform-dev-deploy]
 
     steps:
     - name: Checkout
@@ -153,14 +154,16 @@ jobs:
 # #                                                AMBIENTE DE PROD
 # ###############################################################################################################
 
-  jobs:
-    terraform-prod:
+  
+  terraform-prod-deploy:
+    # if: github.event_name == 'push'
+    defaults:
       run:
         working-directory: terraform-deploy
     name: Terraform-Deploy-Prod
     environment: homolog
     runs-on: ubuntu-latest
-    needs: [defaults]
+    needs: [terraform-homolog-deploy]
 
     steps:
     - name: Checkout
