@@ -1,40 +1,40 @@
 
-resource "azurerm_resource_group" "example" {
-  name     = "rg-tfstate-bra-dev"
-  location = var.location
-}
+# resource "azurerm_resource_group" "example" {
+#   name     = "rg-tfstate-bra-dev"
+#   location = var.location
+# }
 
 
-resource "azurerm_storage_account" "example" {
-  name                     = "stgbradevtfstate01"
-  resource_group_name      = azurerm_resource_group.example.name
-  location                 = azurerm_resource_group.example.location
-  account_tier             = "Standard"
-  account_replication_type = "LRS"
-}
+# resource "azurerm_storage_account" "example" {
+#   name                     = "stgbradevtfstate01"
+#   resource_group_name      = azurerm_resource_group.example.name
+#   location                 = azurerm_resource_group.example.location
+#   account_tier             = "Standard"
+#   account_replication_type = "LRS"
+# }
 
 
-resource "azurerm_storage_container" "example" {
-  name                  = "tfstate"
-  storage_account_name  = azurerm_storage_account.example.name
-  container_access_type = "private"
+# resource "azurerm_storage_container" "example" {
+#   name                  = "tfstate"
+#   storage_account_name  = azurerm_storage_account.example.name
+#   container_access_type = "private"
 
-}
+# }
 
 
-resource "azurerm_virtual_network" "example" {
-  name                = "vnet-github"
-  address_space       = ["172.30.0.0/16"]
-  location            = azurerm_resource_group.example.location
-  resource_group_name = var.resource_group_name
-}
+# resource "azurerm_virtual_network" "example" {
+#   name                = "vnet-github"
+#   address_space       = ["172.30.0.0/16"]
+#   location            = azurerm_resource_group.example.location
+#   resource_group_name = var.resource_group_name
+# }
 
-resource "azurerm_subnet" "example" {
-  name                 = "internal"
-  resource_group_name  = var.resource_group_name
-  virtual_network_name = azurerm_virtual_network.example.name
-  address_prefixes     = ["172.30.0.0/24"]
-}
+# resource "azurerm_subnet" "example" {
+#   name                 = "internal"
+#   resource_group_name  = var.resource_group_name
+#   virtual_network_name = azurerm_virtual_network.example.name
+#   address_prefixes     = ["172.30.0.0/24"]
+# }
 
 # resource "azurerm_network_interface" "example" {
 #   name                = "example-nic"

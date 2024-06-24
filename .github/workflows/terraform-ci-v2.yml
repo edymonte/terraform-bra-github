@@ -24,6 +24,11 @@ jobs:
         working-directory: terraform-deploy
         shell: bash
 
+
+###############################################################################################################
+#                                            AMBIENTE DE DEV
+###############################################################################################################
+
     steps:
     # Checkout the repository to the GitHub Actions runner
     - name: Checkout
@@ -94,7 +99,12 @@ jobs:
             body: output
           })
 
-    - name: Terraform Apply
+    - name: Terraform Plan Status
+      if: steps.plan.outcome == 'failure'
+      run: exit 1
+
+    - name: Terraform Deploy -> Dev
+      environment: dev
       if: github.ref == 'refs/heads/main' && github.event_name == 'push'
       run: terraform apply -auto-approve
       env:
@@ -102,5 +112,118 @@ jobs:
         ARM_TENANT_ID: "${{ secrets.AZURE_TENANT_ID }}"
         ARM_CLIENT_ID: "${{ secrets.AZURE_CLIENT_ID }}"
         ARM_CLIENT_SECRET: "${{ secrets.ARM_CLIENT_SECRET }}"
+
+
+
+###############################################################################################################
+#                                            AMBIENTE DE HOMOLOG
+###############################################################################################################
+
+    - name: Checkout Code
+      uses: actions/checkout@v4
+
+    - name: HashiCorp - Setup Terraform
+      uses: hashicorp/setup-terraform@v2.0.3
+
+    - name: Terraform Init
+      id: init
+      run: terraform init
+      env:
+        ARM_SUBSCRIPTION_ID: "${{ secrets.AZURE_SUBSCRIPTION_ID }}"
+        ARM_TENANT_ID: "${{ secrets.AZURE_TENANT_ID }}"
+        ARM_CLIENT_ID: "${{ secrets.AZURE_CLIENT_ID }}"
+        ARM_CLIENT_SECRET: "${{ secrets.ARM_CLIENT_SECRET }}"
+      
+    - name: Terraform Apply
+      run: terraform apply -auto-approve -var "resource_group_name=${{secrets.AZURE_RESOURCE_GROUP_NAME}}"
+
+  deploy-to-homolog:
+    if: github.event_name != 'pull_request'
+    needs: deploy-to-dev
+    defaults:
+      run:
+        working-directory: terraform-deploy
+      
+    name: Terraform Deploy -> Homolog
+    environment: homolog
+    runs-on: ubuntu-latest
+    env:
+      ARM_CLIENT_ID: "${{ secrets.AZURE_CLIENT_ID }}"
+      ARM_SUBSCRIPTION_ID: "${{ secrets.AZURE_SUBSCRIPTION_ID }}"
+      ARM_TENANT_ID: "${{ secrets.AZURE_TENANT_ID }}"
+      ARM_USE_AZUREAD: true
+
+
+###############################################################################################################
+#                                                AMBIENTE DE PROD
+###############################################################################################################
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v4
+
+    - name: HashiCorp - Setup Terraform
+      uses: hashicorp/setup-terraform@v2.0.3
+
+    - name: Terraform Init
+      id: init
+      run: terraform init
+      env:
+        ARM_SUBSCRIPTION_ID: "${{ secrets.AZURE_SUBSCRIPTION_ID }}"
+        ARM_TENANT_ID: "${{ secrets.AZURE_TENANT_ID }}"
+        ARM_CLIENT_ID: "${{ secrets.AZURE_CLIENT_ID }}"
+        ARM_CLIENT_SECRET: "${{ secrets.ARM_CLIENT_SECRET }}"
+      
+    - name: Terraform Apply
+      run: terraform apply -auto-approve -var "resource_group_name=${{secrets.AZURE_RESOURCE_GROUP_NAME}}"
+
+  deploy-to-prod:
+    if: github.event_name != 'pull_request'
+    needs: deploy-to-homolog
+    defaults:
+      run:
+        working-directory: terraform-deploy
+      
+    name: Terraform Deploy -> Prod
+    environment: prod
+    runs-on: ubuntu-latest
+    env:
+      ARM_CLIENT_ID: "${{ secrets.AZURE_CLIENT_ID }}"
+      ARM_SUBSCRIPTION_ID: "${{ secrets.AZURE_SUBSCRIPTION_ID }}"
+      ARM_TENANT_ID: "${{ secrets.AZURE_TENANT_ID }}"
+      ARM_USE_AZUREAD: true
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v4
+
+    #  Exemplo de como autenticar via Azure CLI
+    #- name: 'Az CLI login'
+    #  uses: azure/login@v1
+    #
+    #  with:
+    #      client-id: ${{ secrets.AZURE_CLIENT_ID }}
+    #      tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+    #      subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+    #- name: 'Run Azure CLI commands'
+    #  run: |
+    #      az account show
+    #      az group list
+          
+    - name: HashiCorp - Setup Terraform
+      uses: hashicorp/setup-terraform@v2.0.3
+
+    - name: Terraform Init
+      id: init
+      run: terraform init
+      env:
+        ARM_SUBSCRIPTION_ID: "${{ secrets.AZURE_SUBSCRIPTION_ID }}"
+        ARM_TENANT_ID: "${{ secrets.AZURE_TENANT_ID }}"
+        ARM_CLIENT_ID: "${{ secrets.AZURE_CLIENT_ID }}"
+        ARM_CLIENT_SECRET: "${{ secrets.ARM_CLIENT_SECRET }}"
+      
+    - name: Terraform Apply
+      run: terraform apply -auto-approve -var "resource_group_name=${{secrets.AZURE_RESOURCE_GROUP_NAME}}"
+
         
         
