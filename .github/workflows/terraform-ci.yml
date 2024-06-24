@@ -15,7 +15,7 @@ permissions:
       
 jobs: 
   analysis:
-    if: github.event_name == 'push'
+    # if: github.event_name == 'push'
     defaults:
       run:
         working-directory: terraform-deploy
@@ -102,7 +102,7 @@ jobs:
       run:
         working-directory: terraform-example-deploy
       
-    name: Deploy to Dev
+    name: terraform Deploy -> Dev
     environment: dev
     runs-on:
       env:
