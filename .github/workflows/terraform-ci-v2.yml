@@ -9,9 +9,12 @@ on:
     #   - terraform-deploy/**
       
   pull_request: # [master, next]
-    paths:
-      - terraform-deploy/**
+     branches:
+      - 'refs/heads/main'
+    # paths:
+    #   - terraform-deploy/**
 
+  workflow_dispatch:
 
 jobs:
   terraform:
